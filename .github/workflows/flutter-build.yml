@@ -20,10 +20,11 @@ jobs:
           java-version: '11'
       
       - name: Setup Flutter
-        uses: actions/setup-flutter@v3
+        uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.10.0'
           channel: 'stable'
+          cache: true
       
       - name: Get dependencies
         run: flutter pub get
@@ -31,9 +32,6 @@ jobs:
       - name: Run tests
         run: flutter test
       
-      - name: Build APK
-        run: flutter build apk --release
-
       - name: Setup Android Keystore
         if: github.event_name != 'pull_request'
         run: |
@@ -42,14 +40,8 @@ jobs:
           echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" >> android/key.properties
           echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> android/key.properties
           echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/key.properties
-        env:
-          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       
       - name: Build signed APK
-        if: github.event_name != 'pull_request'
         run: flutter build apk --release
       
       - name: Upload APK
