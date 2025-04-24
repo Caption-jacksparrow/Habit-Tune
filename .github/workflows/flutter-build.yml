@@ -20,7 +20,7 @@ jobs:
           java-version: '11'
       
       - name: Setup Flutter
-        uses: subosito/flutter-action@v2
+        uses: actions/setup-flutter@v3
         with:
           flutter-version: '3.10.0'
           channel: 'stable'
